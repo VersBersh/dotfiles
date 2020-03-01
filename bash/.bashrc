@@ -148,4 +148,18 @@ bind Space:magic-space
 # shellcheck source=sh/common.sh
 source "$HOME/dotfiles/sh/common.sh"
 
+######################
+### Custom Configs ###
+######################
+
+# Load custom configs edited while using a specific vm
+SRC_DIR=$(dirname $(readlink -ne $(realpath ${BASH_SOURCE[0]})))
+
+for file in $(find $SRC_DIR/.bashrc.d -type f); do
+    if [[ $(basename "$file") != ".gitignore" ]]; then
+        source "$file"
+    fi
+done
+
+
 # vim: syntax=sh cc=80 tw=79 ts=4 sw=4 sts=4 et sr
