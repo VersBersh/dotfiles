@@ -140,22 +140,15 @@ fi
 bind Space:magic-space
 
 
-##########################
-### Common Shell Setup ###
-##########################
+#################################
+### Common and Custom Configs ###
+#################################
 
-# Load our common shell configuration
-# shellcheck source=sh/common.sh
-source "$HOME/dotfiles/sh/common.sh"
-
-######################
-### Custom Configs ###
-######################
-
-# Load custom configs edited while using a specific vm
+# Load configs common to bash and zsh and any 
+# configs specific to particular apps or the system
 SRC_DIR=$(dirname $(readlink -ne $(realpath ${BASH_SOURCE[0]})))
-
-for file in $(find $SRC_DIR/.bashrc.d -type f); do
+echo $SRC_DIR
+for file in $(find $SRC_DIR/.shellrc.d -type f,l); do
     if [[ $(basename "$file") != ".gitignore" ]]; then
         source "$file"
     fi

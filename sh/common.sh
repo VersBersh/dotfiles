@@ -22,49 +22,6 @@ if [ -z "${dotfiles-}" ]; then
     fi
 fi
 
-# Helper functions
-sh_dir="$dotfiles/sh"
-# shellcheck source=sh/source.sh
-. "$sh_dir/source.sh"
-
-# Operating system and environment specific configuration
-kernel_name="$(uname -s)"
-sh_systems_dir="$sh_dir/systems"
-if [ "${kernel_name#*CYGWIN_NT}" != "$kernel_name" ]; then
-    # shellcheck source=sh/systems/cygwin.sh
-    . "$sh_systems_dir/cygwin.sh"
-elif [ "${kernel_name#*Darwin}" != "$kernel_name" ]; then
-    # shellcheck source=sh/systems/macos.sh
-    . "$sh_systems_dir/macos.sh"
-elif [ "${kernel_name#*Linux}" != "$kernel_name" ]; then
-    # shellcheck source=sh/systems/linux.sh
-    . "$sh_systems_dir/linux.sh"
-fi
-unset kernel_name sh_systems_dir
-
-# Additional configuration for various applications
-sh_apps_dir="$sh_dir/apps"
-if [ -d "$sh_apps_dir" ]; then
-    for sh_app in "$sh_apps_dir"/*.sh; do
-        [ -e "$sh_app" ] || break
-        # shellcheck source=/dev/null
-        . "$sh_app"
-    done
-fi
-unset sh_app sh_apps_dir
-
-# Add any local bin directory to our PATH
-if [ -d "$HOME/bin" ]; then
-    build_path "$HOME/bin" "$PATH"
-    export PATH="$build_path"
-fi
-
-# Add any explicit extra paths to our PATH
-if [ -n "$EXTRA_PATHS" ]; then
-    build_path "$EXTRA_PATHS" "$PATH"
-    export PATH="$build_path"
-fi
-unset EXTRA_PATHS
 
 # Set our preferred editor
 if [ -n "$EDITOR_PRIORITY" ]; then
@@ -79,29 +36,29 @@ if [ -n "$EDITOR_PRIORITY" ]; then
 fi
 unset EDITOR_PRIORITY editor editor_path
 
+
 # Include any custom aliases
-sh_aliases_file="$sh_dir/aliases.sh"
+sh_aliases_file="$dorfiles/sh/aliases.sh"
 if [ -f "$sh_aliases_file" ]; then
     # shellcheck source=sh/aliases.sh
     . "$sh_aliases_file"
 fi
-unset sh_aliases_file
+unset sh_aliases_file sh_dir
 
-# Include any custom functions
-sh_functions_dir="$sh_dir/functions"
-if [ -d "$sh_functions_dir" ]; then
-    for sh_function in "$sh_functions_dir"/*.sh; do
-        [ -e "$sh_function" ] || break
-        # shellcheck source=/dev/null
-        . "$sh_function"
-    done
+
+# Use stderred if it's available
+USE_STDERRED=1
+
+# Load stderred if requested and it's present
+stderred_path='/usr/local/lib/libstderred.so'
+if [ -n "${USE_STDERRED-}" ]; then
+    if [ -f "$stderred_path" ]; then
+       build_path "$stderred_path" "$LD_PRELOAD"
+        # shellcheck disable=SC2154
+        export LD_PRELOAD="$build_path"
+    fi
 fi
-unset sh_function sh_functions_dir
+unset USE_STDERRED stderred_path
 
-# Disable toggling flow control (use ixany to re-enable)
-stty -ixon
-
-# Clean-up
-unset build_path sh_dir
-
+echo DONE!
 # vim: syntax=sh cc=80 tw=79 ts=4 sw=4 sts=4 et sr

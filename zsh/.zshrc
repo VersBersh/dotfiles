@@ -3,9 +3,6 @@
 # Path to oh-my-zsh configuration
 ZSH="$HOME/.oh-my-zsh"
 
-# Path to our common shell configuration
-SHCFG="$HOME/dotfiles/sh/common.sh"
-
 # Name of the oh-my-zsh theme to load
 if [[ -d $ZSH/custom/themes/powerlevel10k ]]; then
     ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -50,15 +47,6 @@ source "$ZSH/oh-my-zsh.sh"
 
 # Disable the auto_cd option enabled by oh-my-zsh
 unsetopt auto_cd
-
-# Load our common shell configuration
-#
-# By default zsh does *not* perform field splitting on unquoted parameter
-# expansions. We temporarily enable this option for compatibility with our
-# common shell configuration as most shells default to this behaviour.
-setopt shwordsplit
-source "$SHCFG"
-unsetopt shwordsplit
 
 # Create a zkbd compatible hash populating it via the terminfo array
 typeset -g -A key
@@ -114,40 +102,25 @@ elif [ -d "/usr/local/share/zsh/help" ]; then
     HELPDIR="/usr/local/share/zsh/help"
 fi
 
-# Load virtualenvwrapper if it is present
-if [ -f /etc/bash_completion.d/virtualenvwrapper ]; then
-    export WORKON_HOME="$HOME/.virtualenvs"
-    source /etc/bash_completion.d/virtualenvwrapper
-fi
-
-# Include any custom functions
-zsh_functions_dir="$dotfiles/sh/functions"
-if [ -d "$zsh_functions_dir" ]; then
-    for zsh_function in $zsh_functions_dir/*.zsh; do
-        [ -e "$zsh_function" ] || break
-        . "$zsh_function"
-    done
-fi
-unset zsh_function zsh_functions_dir
-
-# Theme customisations
-case $ZSH_THEME in
-    agnoster)
-        # Hide this user in the prompt
-        DEFAULT_USER="sdl"
-
-        # Shrink the current path
-        prompt_dir() {
-            prompt_segment blue black "$(shrink_path -l -t)"
-        }
-        ;;
-    powerlevel10k/powerlevel10k)
-        [[ ! -f $HOME/.p10k.zsh ]] || source "$HOME/.p10k.zsh"
-        ;;
-esac
 
 # Useful aliases
 alias gita='git-repo-invoke'
 alias gits='git-repo-summary'
+
+
+#################################
+### Common and Custom Configs ###
+#################################
+
+# Load configs common to bash and zsh and any custom
+# configs specific to a particular app or system
+SRC_DIR=$(dirname $(readlink -ne $(realpath ${(%):-%x})))
+
+for file in $(find $SRC_DIR/.shellrc.d -type f,l); do
+    if [[ $(basename "$file") != ".gitignore" ]]; then
+        source "$file"
+    fi
+done
+ 
 
 # vim: syntax=zsh cc=80 tw=79 ts=4 sw=4 sts=4 et sr
