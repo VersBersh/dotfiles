@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 stderred_path="/usr/local/lib/stderred/libstderred.so"
 
 if [ -f "$stderred_path" ]; then

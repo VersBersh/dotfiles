@@ -146,9 +146,15 @@ bind Space:magic-space
 
 # Load configs common to bash and zsh and any 
 # configs specific to particular apps or the system
-SRC_DIR=$(dirname $(readlink -ne $(realpath ${BASH_SOURCE[0]})))
-echo $SRC_DIR
-for file in $(find $SRC_DIR/.shellrc.d -type f,l); do
+# src dir should  be the home directory
+SRC_DIR=$(dirname "${BASH_SOURCE[0]}")
+
+if [[ "$SRC_DIR" != "$HOME" ]]; then
+    echo ".bashrc was not stowed to the home directory" 1>&2
+    exit 1
+fi
+
+for file in $(find "$SRC_DIR/.shellrc.d" -type f,l); do
     if [[ $(basename "$file") != ".gitignore" ]]; then
         source "$file"
     fi
