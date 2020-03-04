@@ -4,16 +4,13 @@
 ZSH="$HOME/.oh-my-zsh"
 
 # Name of the oh-my-zsh theme to load
-if [[ -d $ZSH/custom/themes/oliver ]]; then
+if [[ -f "$ZSH/custom/themes/oliver.zsh-theme" ]]; then
     ZSH_THEME="oliver"
 else
     ZSH_THEME="agnoster"
 fi
 
 export LANG=en_AU.UTF-8
-
-# make arrays index from zero
-setopt KSH_ARRAYS
 
 # Enable case-sensitive completion
 CASE_SENSITIVE="true"
@@ -102,5 +99,6 @@ for file in $(find $HOME/.shellrc.d -type f,l | (LC_COLLATE=c sort)); do
     fi
 done
  
+
 
 # vim: syntax=zsh cc=80 tw=79 ts=4 sw=4 sts=4 et sr

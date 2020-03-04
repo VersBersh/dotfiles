@@ -133,6 +133,8 @@ function script_init() {
 function colour_init() {
     if [[ -z ${no_colour-} ]]; then
         # Text attributes
+        readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+
         readonly ta_bold="$(tput bold 2> /dev/null || true)"
         printf '%b' "$ta_none"
         readonly ta_uscore="$(tput smul 2> /dev/null || true)"
@@ -181,6 +183,7 @@ function colour_init() {
         printf '%b' "$ta_none"
     else
         # Text attributes
+        readonly ta_none=''
         readonly ta_bold=''
         readonly ta_uscore=''
         readonly ta_blink=''

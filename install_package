@@ -13,16 +13,17 @@ set -o pipefail         # Use last non-zero exit code in a pipeline
 #       $@ (optional): any flags to pass to the installer
 function main()
 {
-    source "$dotfiles/scripts/utils.sh"
-
     local dotfiles="$HOME/dotfiles"
     local package=$1
     shift
 
-    if [[ $EUID -eq 0 ]]; then
+    source "$dotfiles/scripts/utils.sh"
+    colour_init
+
+    if [[ $EUID -ne 0 ]]; then
         script_exit "please run as superuser" 2
     fi
-    
+
     if ! [[ -n "$package" && -d "$dotfiles/$package" ]]; then
         script_exit "no such package: $package" 2
     fi
@@ -33,10 +34,10 @@ function main()
         "$dotfiles/$package/install.sh" "$@"
     else
         apt-get install -y "$package"
-    fi     
+    fi
 
-    # stow the dotfiles
-    (cd "$dotfiles" && stow/bin/stow "$package")
+    pretty_print "stowing the dotfiles for $package" $fg_cyan
+    (cd "$dotfiles" && stow/bin/stow -R "$package")
 }
 
 main "$@"
