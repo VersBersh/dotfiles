@@ -4,11 +4,16 @@
 ZSH="$HOME/.oh-my-zsh"
 
 # Name of the oh-my-zsh theme to load
-if [[ -d $ZSH/custom/themes/powerlevel10k ]]; then
-    ZSH_THEME="powerlevel10k/powerlevel10k"
+if [[ -d $ZSH/custom/themes/oliver ]]; then
+    ZSH_THEME="oliver"
 else
     ZSH_THEME="agnoster"
 fi
+
+export LANG=en_AU.UTF-8
+
+# make arrays index from zero
+setopt KSH_ARRAYS
 
 # Enable case-sensitive completion
 CASE_SENSITIVE="true"
@@ -18,9 +23,6 @@ DISABLE_AUTO_UPDATE="true"
 
 # How often auto-update checks occur
 # export UPDATE_ZSH_DAYS=13
-
-# Disable colors in ls
-# DISABLE_LS_COLORS="true"
 
 # Disable autosetting terminal title
 # DISABLE_AUTO_TITLE="true"
@@ -36,11 +38,6 @@ COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load?
 plugins=(colored-man-pages gitfast shrink-path)
-
-# Add custom zsh completions to fpath
-if [[ -d $HOME/.local/share/zsh/site-functions ]]; then
-    fpath=($HOME/.local/share/zsh/site-functions $fpath)
-fi
 
 # Actually load oh-my-zsh with our settings
 source "$ZSH/oh-my-zsh.sh"
@@ -93,28 +90,13 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-finish
 fi
 
-# Configure online help for zsh
-alias run-help &> /dev/null
-autoload run-help
-if [ -d "/usr/share/zsh/help" ]; then
-    HELPDIR="/usr/share/zsh/help"
-elif [ -d "/usr/local/share/zsh/help" ]; then
-    HELPDIR="/usr/local/share/zsh/help"
-fi
-
-
-# Useful aliases
-alias gita='git-repo-invoke'
-alias gits='git-repo-summary'
-
-
 #################################
 ### Common and Custom Configs ###
 #################################
 
 # Load configs common to bash and zsh and any custom
 # configs specific to a particular app or system
-SRC_DIR=$(dirname $(readlink -ne $(realpath ${(%):-%x})))
+SRC_DIR=$(dirname ${(%):-%x})
 
 for file in $(find $SRC_DIR/.shellrc.d -type f,l); do
     if [[ $(basename "$file") != ".gitignore" ]]; then
