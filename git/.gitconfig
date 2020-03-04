@@ -6,12 +6,11 @@
 	path = .gitconfig-win
 
 [user]
-	name = Samuel D. Leslie
-	email = sdl@nexiom.net
-	signingkey = 48CB9B43C8BA347C
+	name = Oliver Chambers
+	email = o.chambers2@gmail.com
 
 [github]
-	user = ralish
+	user = VersBersh
 
 [advice]
 	statusHints = false
@@ -91,12 +90,6 @@
 
 [url "git@gitlab.com:"]
 	insteadof = gl:
-
-[url "sdl@git.launchpad.net/"]
-	insteadof = lp:
-
-[url "sdl@git.launchpad.net/~sdl/+git/"]
-	insteadof = lpme:
 
 [alias]
 	a   = add
@@ -220,8 +213,8 @@
 	rv  = revert --no-commit
 	rvn = revert
 
-	s   = status --short --branch
-	sl  = status --long
+    s   = status --long
+	ss  = status --short --branch
 
 	sh  = shortlog --summary --email
 	shl = shortlog

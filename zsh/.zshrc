@@ -96,9 +96,7 @@ fi
 
 # Load configs common to bash and zsh and any custom
 # configs specific to a particular app or system
-SRC_DIR=$(dirname ${(%):-%x})
-
-for file in $(find $SRC_DIR/.shellrc.d -type f,l); do
+for file in $(find $HOME/.shellrc.d -type f,l | (LC_COLLATE=c sort)); do
     if [[ $(basename "$file") != ".gitignore" ]]; then
         source "$file"
     fi

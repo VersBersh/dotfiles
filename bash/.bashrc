@@ -144,17 +144,9 @@ bind Space:magic-space
 ### Common and Custom Configs ###
 #################################
 
-# Load configs common to bash and zsh and any 
-# configs specific to particular apps or the system
-# src dir should  be the home directory
-SRC_DIR=$(dirname "${BASH_SOURCE[0]}")
-
-if [[ "$SRC_DIR" != "$HOME" ]]; then
-    echo ".bashrc was not stowed to the home directory" 1>&2
-    exit 1
-fi
-
-for file in $(find "$SRC_DIR/.shellrc.d" -type f,l); do
+# Load configs common to bash and zsh and any custom
+# configs specific to a particular app or system
+for file in $(find "$HOME/.shellrc.d" -type f,l | (LC_COLLATE=C sort)); do
     if [[ $(basename "$file") != ".gitignore" ]]; then
         source "$file"
     fi

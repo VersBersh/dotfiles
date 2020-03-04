@@ -35,58 +35,14 @@ logs/
 [._]sw[a-p]
 
 # Visual Studio Code
-.vscode/ipch
+.vscode
 
 
 # ******************************* Components **********************************
 
-# bash
-/bash/.bash_history
-
-# Bazaar
-/bazaar/.bazaar/lock/
-
-# Clink
-/clink/.history
-
-# CPAN
-/cpan/.cpan/.lock
-/cpan/.cpan/FTPstats.yml
-/cpan/.cpan/histfile
-/cpan/.cpan/Metadata
-/cpan/.cpan/build/
-/cpan/.cpan/sources/
-
-# fish
-/fish/.config/fish/fish_history
-/fish/.config/fish/fishd.*
-/fish/.config/fish/generated_completions/
-
-# Irssi
-/irssi/
-
-# KiTTY
-/kitty/
 
 # less
 /less/[._]less
-
-# OpenSSH
-/openssh/
-
-# PowerShell
-/posh/Modules/
-/posh/Settings/
-
-# PuTTY
-/putty/
-
-# Shell app configurations
-/sh/apps/
-
-# Subversion
-/subversion/.subversion/README.txt
-/subversion/.subversion/auth/
 
 # Vim
 /vim/.vim/.netrwhist
@@ -96,12 +52,6 @@ logs/
 /vim/.vim/swap/
 /vim/.vim/undo/
 /vim/.vim/view/
-
-# Visual Studio
-/vs/
-
-# Visual Studio Code
-/vscode/extensions.txt
 
 # Web browsers
 /chrome/

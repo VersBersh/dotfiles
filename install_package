@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# A better class of script...
+set -o errexit          # Exit on most errors (see the manual)
+set -o errtrace         # Make sure any error trap is inherited
+set -o nounset          # Disallow expansion of unset variables
+set -o pipefail         # Use last non-zero exit code in a pipeline
+#set -o xtrace          # Trace the execution of the script (debug)
+
+
+# DESC: install a package
+# ARGS: $1 (required): package name
+#       $@ (optional): any flags to pass to the installer
+function main()
+{
+    source "$dotfiles/scripts/utils.sh"
+
+    local dotfiles="$HOME/dotfiles"
+    local package=$1
+    shift
+
+    if [[ $EUID -eq 0 ]]; then
+        script_exit "please run as superuser" 2
+    fi
+    
+    if ! [[ -n "$package" && -d "$dotfiles/$package" ]]; then
+        script_exit "no such package: $package" 2
+    fi
+
+    # install using the install script if available
+    # otherwise default to apt-get
+    if [[ -f "$dotfiles/$package/install.sh" ]]; then
+        "$dotfiles/$package/install.sh" "$@"
+    else
+        apt-get install -y "$package"
+    fi     
+
+    # stow the dotfiles
+    (cd "$dotfiles" && stow/bin/stow "$package")
+}
+
+main "$@"

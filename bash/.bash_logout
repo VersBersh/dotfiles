@@ -1,1 +1,1 @@
-../sh/logout.sh
+../shell/logout.sh

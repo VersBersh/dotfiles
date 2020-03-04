@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 # A better class of script...
 set -o errexit          # Exit on most errors (see the manual)
@@ -21,6 +22,8 @@ function parse_params()
                 shift
                 version=$1
                 ;;
+            --virtualenv)
+                virtualenv=true
             *)
                 script_exit "Invalid parameter was provided: $param" 1
                 ;;
@@ -43,6 +46,11 @@ function main()
         eval "$(pyenv init -)"
         
         pyenv install "$version"
+    fi
+
+    if virtualenv; then
+        plugin_dir="$HOME/.pyenv/plugins/pyenv-virtualenv"
+        git clone https://github.com/pyenv/pyenv-virtualenv.git "$plugin_dir"
     fi
 }
 
