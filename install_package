@@ -19,9 +19,14 @@ function main()
 
     source "$dotfiles/scripts/utils.sh"
     colour_init
+    style="$fg_cyan$ta_bold"
 
-    if [[ $EUID -ne 0 ]]; then
-        script_exit "please run as superuser" 2
+    if [[ $EUID -eq 0 ]]; then
+        # don't run as superuser
+        script_exit "do not run as superuser" 2
+    else
+        # but get sudo credentials if we need them later
+        sudo -v
     fi
 
     if ! [[ -n "$package" && -d "$dotfiles/$package" ]]; then
@@ -30,13 +35,14 @@ function main()
 
     # install using the install script if available
     # otherwise default to apt-get
+    pretty_print "installing $package..." "$style"
     if [[ -f "$dotfiles/$package/install.sh" ]]; then
-        "$dotfiles/$package/install.sh" "$@"
+        source "$dotfiles/$package/install.sh" "$@"
     else
-        apt-get install -y "$package"
+        sudo apt-get install -y "$package"
     fi
 
-    pretty_print "stowing the dotfiles for $package" $fg_cyan
+    pretty_print "stowing $package dotfiles..." "$style"
     (cd "$dotfiles" && stow/bin/stow -R "$package")
 }
 
