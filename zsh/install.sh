@@ -10,7 +10,7 @@ set -o pipefail         # Use last non-zero exit code in a pipeline
 # DESC: Parameter parser
 # ARGS: $@ (optional): Arguments provided to the script
 # OUTS: Variables indicating command-line parameters and options
-function parse_params() 
+function parse_params()
 {
     local param
     omz=false
@@ -32,14 +32,24 @@ function parse_params()
 
 function main()
 {
+    source "$HOME/dotfiles/scripts/utils.sh"
+    colour_init
+
+    local info_style="$fg_cyan$ta_bold"
+    local warn_style="$fg_yellow$ta_emph"
+
     parse_params "$@"
 
-    apt-get install zsh
+    if [[ -z "${ZSH_VERSION-}" ]]; then
+        sudo apt-get install zsh
+    else
+        pretty_print "ZSH is already installed!" "$warn_style"
+    fi
 
     if $omz; then
-        # install oh-my-zsh:
+        pretty_print "installing oh-my-zsh..." "$info_style"
         # --unattended: don't run zsh after install
-        sh "$HOME/dotfiles/zsh/install_scripts/install-oh-my-zsh.sh" --unattended || true
+        sh "$HOME/dotfiles/zsh/install_scripts/install-oh-my-zsh.sh" --unattended
 
         # remove .zshrc so we can stow our own
         echo "removing .zshrc"
@@ -47,10 +57,10 @@ function main()
             rm "$HOME/.zshrc"
         fi
     fi
+    unset omz
 
-    # change the default shell to zsh
-    echo "changing the default shell"
-    chsh -s /bin/zsh
+    pretty_print "changing the default shell to zsh" "$info_style"
+    sudo chsh -s $(which zsh)
 }
 
 
