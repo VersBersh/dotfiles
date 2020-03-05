@@ -1,6 +1,8 @@
 [core]
 	attributesFile = ~/.gitattributes
 	excludesFile = ~/.gitignore
+	editor = vim
+
 
 [include]
 	path = .gitconfig-win
