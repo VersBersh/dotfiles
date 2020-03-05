@@ -4,6 +4,15 @@
 # tries to be compatible with bash and zsh
 # https://github.com/ralish/bash-script-template
 
+
+# source guard (prevent sourcing multiple times)
+if [[ -n ${_BASH_TEMPLATE_SOURCED-} ]]; then
+    exit 0  # already sourced
+else
+    readonly _BASH_TEMPLATE_SOURCED=true
+fi
+
+
 # DESC: Handler for unexpected errors
 # ARGS: $1 (optional): Exit code (defaults to 1)
 # OUTS: None
@@ -131,9 +140,19 @@ function script_init() {
 # NOTE: If --no-colour was set the variables will be empty
 # shellcheck disable=SC2034
 function colour_init() {
+
+    # make sure colour_init is only called once
+    # because the variables are readonly!
+    if [[ -n "${_colour_initialized-}" ]]; then
+        return 0
+    fi
+
     if [[ -z ${no_colour-} ]]; then
         # Text attributes
-        readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+        if [[ -z "${ta_none-}" ]]; then
+            # if script_init wasn't called
+            readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+        fi
 
         readonly ta_bold="$(tput bold 2> /dev/null || true)"
         printf '%b' "$ta_none"
@@ -210,6 +229,8 @@ function colour_init() {
         readonly bg_white=''
         readonly bg_yellow=''
     fi
+
+    readonly _colour_initialized=true
 }
 
 # DESC: Initialise Cron mode
