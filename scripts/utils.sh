@@ -7,7 +7,7 @@
 
 # source guard (prevent sourcing multiple times)
 if [[ -n ${_BASH_TEMPLATE_SOURCED-} ]]; then
-    exit 0  # already sourced
+    return  # already sourced
 else
     readonly _BASH_TEMPLATE_SOURCED=true
 fi
@@ -156,6 +156,8 @@ function colour_init() {
 
         readonly ta_bold="$(tput bold 2> /dev/null || true)"
         printf '%b' "$ta_none"
+        readonly ta_emph="$(tput sitm 2> /dev/null || true)"
+        printf '%b' "$ta_none"
         readonly ta_uscore="$(tput smul 2> /dev/null || true)"
         printf '%b' "$ta_none"
         readonly ta_blink="$(tput blink 2> /dev/null || true)"
@@ -204,6 +206,7 @@ function colour_init() {
         # Text attributes
         readonly ta_none=''
         readonly ta_bold=''
+        readonly ta_emph=''
         readonly ta_uscore=''
         readonly ta_blink=''
         readonly ta_reverse=''
