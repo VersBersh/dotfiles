@@ -34,7 +34,7 @@ COMPLETION_WAITING_DOTS="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Which plugins would you like to load?
-plugins=(colored-man-pages gitfast shrink-path)
+plugins=(colored-man-pages git shrink-path)
 
 # Actually load oh-my-zsh with our settings
 source "$ZSH/oh-my-zsh.sh"
