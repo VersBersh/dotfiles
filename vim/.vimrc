@@ -41,6 +41,8 @@ endif
 
 " ********************************** General **********************************
 
+syntax enable
+
 " Optimise colours for dark backgrounds
 set background=dark
 
@@ -723,6 +725,7 @@ call plug#end()
 
 " Set our preferred colour scheme
 try
+    let g:solarized_termcolors=256
     colorscheme solarized
 catch
     colorscheme default
