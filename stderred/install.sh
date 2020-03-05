@@ -11,34 +11,40 @@ set -o pipefail         # Use last non-zero exit code in a pipeline
 function main()
 {
     source "$HOME/dotfiles/scripts/utils.sh"
+    colour_init
+
+    local info_style="$fg_cyan$ta_bold"
+    local warn_style="$fg_yellow$ta_emph"
 
     local src_dir=/usr/local/src/stderred
-    local lib_dir=/usr/local/lib   
+    local lib_dir=/usr/local/lib
 
     if [[ -f "$lib_dir/libstderred.so" ]]; then
-        pretty_print "stderred already installed" fg_yellow
+        pretty_print "stderred already installed" "$warn_style"
         script_exit "exiting install"  0
     fi
 
-    # dependencies
-    apt-get install -y build-essential cmake   
-
-    if [ -d "$src_dir" ]; then
-        exit_script "directory stderred already exists!" 2
+    if [[ -d "$src_dir" ]]; then
+        script_exit "directory already exists! $src_dir" 2
     else
-        mkdir "$src_dir"
+        sudo mkdir "$src_dir"
     fi
 
-    git clone git://github.com/sickill/stderred.git "$src_dir"
+    pretty_print "installing build dependencies..." "$info_style"
+    sudo apt-get install -y build-essential cmake
 
+    pretty_print "cloning stderred..." "$info_style"
+    sudo git clone git://github.com/sickill/stderred.git "$src_dir"
+
+    pretty_print "building stderred..." "$info_style"
     cd "$src_dir"
-    make
+    sudo make
 
     # put .so in /usr/local/share
-    if ! [ -f $src_dir/build/libstderred.so ]; then
-        exit_script "build failed!" 2
+    if ! [[ -f $src_dir/build/libstderred.so ]]; then
+        script_exit "build failed!" 2
     else
-        ln -s "$src_dir/build/libstderred.so" $lib_dir
+        sudo ln -s "$src_dir/build/libstderred.so" $lib_dir
     fi
 }
 
