@@ -16,33 +16,37 @@ function main()
     source "$HOME/dotfiles/scripts/utils.sh"
     colour_init
 
+    local info_style="$fg_green$ta_bold"
+    local warn_style="$fg_yellow$ta_emph"
+
     local dotfiles="$HOME/dotfiles"
-    local style="$fg_cyan$ta_bold"
     local package="${1-}";
     shift
 
     if [[ $EUID -eq 0 ]]; then
-        # don't run as superuser
-        script_exit "do not run as superuser" 2
+        # don't run as sudo because some installs need $HOME
+        pretty_print "do not run install_package as sudo" "$warn_style"
+        script_exit "exiting script..." 2
     else
         # but get sudo credentials if we need them later
         sudo -v
     fi
 
     if ! [[ -n "$package" && -d "$dotfiles/$package" ]]; then
-        script_exit "no such package: $package" 2
+        pretty_print "no such package: $package" "$warn_style"
+        script_exit "exiting script..." 2
     fi
 
     # install using the install script if available
     # otherwise default to apt-get
-    pretty_print "installing $package..." "$style"
+    pretty_print "installing $package..." "$info_style"
     if [[ -f "$dotfiles/$package/install.sh" ]]; then
         source "$dotfiles/$package/install.sh" "$@"
     else
         sudo apt-get install -y "$package"
     fi
 
-    pretty_print "stowing $package dotfiles..." "$style"
+    pretty_print "stowing $package dotfiles..." "$info_style"
     (cd "$dotfiles" && stow/bin/stow -R "$package")
 }
 
