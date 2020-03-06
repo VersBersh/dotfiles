@@ -9,7 +9,7 @@
 if [[ -n ${_BASH_TEMPLATE_SOURCED-} ]]; then
     return  # already sourced
 else
-    readonly _BASH_TEMPLATE_SOURCED=true
+    typeset -rg _BASH_TEMPLATE_SOURCED=true
 fi
 
 
@@ -121,17 +121,17 @@ function script_exit() {
 # shellcheck disable=SC2034
 function script_init() {
     # Useful paths
-    readonly orig_cwd="$PWD"
+    typeset -rg orig_cwd="$PWD"
 
-    [[ -n $BASH_VERSION ]] && readonly script_path="${BASH_SOURCE[1]}"
-    [[ -n $ZSH_VERSION ]]  && readonly script_path="${(%):-%N}"
+    [[ -n $BASH_VERSION ]] && typeset -rg script_path="${BASH_SOURCE[1]}"
+    [[ -n $ZSH_VERSION ]]  && typeset -rg script_path="${(%):-%N}"
 
-    readonly script_dir="$(dirname "$script_path")"
-    readonly script_name="$(basename "$script_path")"
-    readonly script_params="$*"
+    typeset -rg script_dir="$(dirname "$script_path")"
+    typeset -rg script_name="$(basename "$script_path")"
+    typeset -rg script_params="$*"
 
     # Important to always set as we use it in the exit handler
-    readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+    typeset -rg ta_none="$(tput sgr0 2> /dev/null || true)"
 }
 
 # DESC: Initialise colour variables
@@ -151,89 +151,89 @@ function colour_init() {
         # Text attributes
         if [[ -z "${ta_none-}" ]]; then
             # if script_init wasn't called
-            readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+            typeset -rg ta_none="$(tput sgr0 2> /dev/null || true)"
         fi
 
-        readonly ta_bold="$(tput bold 2> /dev/null || true)"
+        typeset -rg ta_bold="$(tput bold 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_emph="$(tput sitm 2> /dev/null || true)"
+        typeset -rg ta_emph="$(tput sitm 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_uscore="$(tput smul 2> /dev/null || true)"
+        typeset -rg ta_uscore="$(tput smul 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_blink="$(tput blink 2> /dev/null || true)"
+        typeset -rg ta_blink="$(tput blink 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_reverse="$(tput rev 2> /dev/null || true)"
+        typeset -rg ta_reverse="$(tput rev 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_conceal="$(tput invis 2> /dev/null || true)"
+        typeset -rg ta_conceal="$(tput invis 2> /dev/null || true)"
         printf '%b' "$ta_none"
 
         # Foreground codes
-        readonly fg_black="$(tput setaf 0 2> /dev/null || true)"
+        typeset -rg fg_black="$(tput setaf 0 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_blue="$(tput setaf 4 2> /dev/null || true)"
+        typeset -rg fg_blue="$(tput setaf 4 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_cyan="$(tput setaf 6 2> /dev/null || true)"
+        typeset -rg fg_cyan="$(tput setaf 6 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_green="$(tput setaf 2 2> /dev/null || true)"
+        typeset -rg fg_green="$(tput setaf 2 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_magenta="$(tput setaf 5 2> /dev/null || true)"
+        typeset -rg fg_magenta="$(tput setaf 5 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_red="$(tput setaf 1 2> /dev/null || true)"
+        typeset -rg fg_red="$(tput setaf 1 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_white="$(tput setaf 7 2> /dev/null || true)"
+        typeset -rg fg_white="$(tput setaf 7 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_yellow="$(tput setaf 3 2> /dev/null || true)"
+        typeset -rg fg_yellow="$(tput setaf 3 2> /dev/null || true)"
         printf '%b' "$ta_none"
 
         # Background codes
-        readonly bg_black="$(tput setab 0 2> /dev/null || true)"
+        typeset -rg bg_black="$(tput setab 0 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_blue="$(tput setab 4 2> /dev/null || true)"
+        typeset -rg bg_blue="$(tput setab 4 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_cyan="$(tput setab 6 2> /dev/null || true)"
+        typeset -rg bg_cyan="$(tput setab 6 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_green="$(tput setab 2 2> /dev/null || true)"
+        typeset -rg bg_green="$(tput setab 2 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_magenta="$(tput setab 5 2> /dev/null || true)"
+        typeset -rg bg_magenta="$(tput setab 5 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_red="$(tput setab 1 2> /dev/null || true)"
+        typeset -rg bg_red="$(tput setab 1 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_white="$(tput setab 7 2> /dev/null || true)"
+        typeset -rg bg_white="$(tput setab 7 2> /dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_yellow="$(tput setab 3 2> /dev/null || true)"
+        typeset -rg bg_yellow="$(tput setab 3 2> /dev/null || true)"
         printf '%b' "$ta_none"
     else
         # Text attributes
-        readonly ta_none=''
-        readonly ta_bold=''
-        readonly ta_emph=''
-        readonly ta_uscore=''
-        readonly ta_blink=''
-        readonly ta_reverse=''
-        readonly ta_conceal=''
+        typeset -rg ta_none=''
+        typeset -rg ta_bold=''
+        typeset -rg ta_emph=''
+        typeset -rg ta_uscore=''
+        typeset -rg ta_blink=''
+        typeset -rg ta_reverse=''
+        typeset -rg ta_conceal=''
 
         # Foreground codes
-        readonly fg_black=''
-        readonly fg_blue=''
-        readonly fg_cyan=''
-        readonly fg_green=''
-        readonly fg_magenta=''
-        readonly fg_red=''
-        readonly fg_white=''
-        readonly fg_yellow=''
+        typeset -rg fg_black=''
+        typeset -rg fg_blue=''
+        typeset -rg fg_cyan=''
+        typeset -rg fg_green=''
+        typeset -rg fg_magenta=''
+        typeset -rg fg_red=''
+        typeset -rg fg_white=''
+        typeset -rg fg_yellow=''
 
         # Background codes
-        readonly bg_black=''
-        readonly bg_blue=''
-        readonly bg_cyan=''
-        readonly bg_green=''
-        readonly bg_magenta=''
-        readonly bg_red=''
-        readonly bg_white=''
-        readonly bg_yellow=''
+        typeset -rg bg_black=''
+        typeset -rg bg_blue=''
+        typeset -rg bg_cyan=''
+        typeset -rg bg_green=''
+        typeset -rg bg_magenta=''
+        typeset -rg bg_red=''
+        typeset -rg bg_white=''
+        typeset -rg bg_yellow=''
     fi
 
-    readonly _colour_initialized=true
+    typeset -rg _colour_initialized=true
 }
 
 # DESC: Initialise Cron mode
