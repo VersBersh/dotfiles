@@ -466,6 +466,16 @@ endfunction
 
 " ******************************* Key Mappings ********************************
 
+" remap ctrl arrow key sequences for PuTTY
+" on VMs that are accessed via PuTTY export IS_PUTTY_SESSION on connection
+if !empty($IS_PUTTY_SESSION)
+    map <ESC>[1;5D <C-Left>
+    map <ESC>[1;5C <C-Right>
+    map! <ESC>[1;5D <C-Left>
+    map! <ESC>[1;5C <C-Right>
+endif
+
+
 " Key to use for <Leader>
 let mapleader = '\'
 
