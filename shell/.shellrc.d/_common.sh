@@ -7,7 +7,7 @@
 # includes configuration for ubuntu built-ins such as apt-get
 
 # Preferred text editors ordered by priority (space-separated)
-EDITOR_PRIORITY='vim vi nano pico'
+EDITOR_PRIORITY=(vim vi nano pico)
 
 # Locations to prefix to PATH (colon-separated)
 EXTRA_PATHS=''
@@ -15,8 +15,8 @@ EXTRA_PATHS=''
 # -----------------------------------------------------------------------------
 
 # Set our preferred editor
-if [ -n "$EDITOR_PRIORITY" ]; then
-    for editor in $EDITOR_PRIORITY; do
+if [ -n "${EDITOR_PRIORITY[*]}" ]; then
+    for editor in "${EDITOR_PRIORITY[@]}"; do
         editor_path="$(command -v "$editor")"
         if [ -n "$editor_path" ]; then
             export EDITOR="$editor_path"
