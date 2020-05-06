@@ -39,6 +39,9 @@ plugins=(colored-man-pages git shrink-path)
 # Actually load oh-my-zsh with our settings
 source "$ZSH/oh-my-zsh.sh"
 
+# don't share history between zsh sessions (e.g. in tmux)
+unsetopt sharehistory
+
 # Disable the auto_cd option enabled by oh-my-zsh
 unsetopt auto_cd
 
